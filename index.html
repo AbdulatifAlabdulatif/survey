@@ -7,51 +7,92 @@
 <title>دراسة عن استخدام الخدمات الرقمية</title>
 <style>
   :root {
-    --bg: #f6f7f9; --card: #ffffff; --text: #1d2330; --muted: #5d6678;
-    --line: #dfe3ea; --accent: #1f6f78; --accent-weak: #e3f0f1; --error: #b3261e;
+    --page: #eef2f0; --sheet: #ffffff; --ink: #17211e; --muted: #56635e;
+    --rule: #d6dedb; --green: #0e5c4a; --green-tint: #e4efeb; --green-ink: #ffffff;
+    --dialog: #f4f6fa; --dialog-edge: #c7cfdd; --error: #b3261e;
+    --font: "SF Arabic", "Geeza Pro", "Segoe UI", "Noto Sans Arabic", "Noto Naskh Arabic", Tahoma, sans-serif;
   }
   @media (prefers-color-scheme: dark) {
-    :root { --bg: #14171c; --card: #1d2128; --text: #e8ebf0; --muted: #a3abb9;
-            --line: #323844; --accent: #5fb3bb; --accent-weak: #1e3336; --error: #f2857c; }
+    :root { --page: #101614; --sheet: #18201d; --ink: #e6ece9; --muted: #a2b0aa;
+            --rule: #2e3a36; --green: #5cc0a2; --green-tint: #1c302a; --green-ink: #0b1411;
+            --dialog: #1f2630; --dialog-edge: #3a4658; --error: #f2857c; }
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--text);
-         font-family: "Segoe UI", "Geeza Pro", "Noto Naskh Arabic", Tahoma, sans-serif;
-         font-size: 17px; line-height: 1.7; }
-  main { max-width: 680px; margin: 0 auto; padding: 16px; }
-  .progress { height: 6px; background: var(--line); border-radius: 3px; margin: 8px 0 16px; overflow: hidden; }
-  .progress > div { height: 100%; width: 0; background: var(--accent); transition: width .2s; }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 16px; margin-bottom: 14px; }
-  h1 { font-size: 1.35rem; margin: 0 0 12px; line-height: 1.5; }
-  h2 { font-size: 1.12rem; margin: 0 0 6px; color: var(--accent); }
-  .desc { color: var(--muted); margin: 0 0 4px; }
-  ul.info { padding-inline-start: 20px; margin: 8px 0; }
-  .q { padding: 14px 0; border-top: 1px solid var(--line); }
-  .q:first-of-type { border-top: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--font);
+         font-size: 17px; line-height: 1.75; }
+  .top { position: sticky; top: 0; z-index: 5; background: var(--page); border-bottom: 1px solid var(--rule); }
+  .top-inner { max-width: 760px; margin: 0 auto; padding: 10px 16px 8px; display: flex; gap: 12px;
+               align-items: baseline; justify-content: space-between; }
+  .brand { font-size: .95rem; font-weight: 600; color: var(--green); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .step { font-size: .88rem; color: var(--muted); white-space: nowrap; }
+  .track { height: 3px; background: var(--rule); }
+  .track > div { height: 100%; width: 0; background: var(--green); transition: width .25s ease; }
+  main { max-width: 760px; margin: 0 auto; padding: 20px 16px 40px; }
+  .sheet { background: var(--sheet); border: 1px solid var(--rule); border-radius: 14px; padding: 24px 20px; }
+  .sheet + .sheet { margin-top: 16px; }
+  h1 { font-size: 1.6rem; line-height: 1.45; margin: 0 0 14px; font-weight: 700; }
+  h2 { font-size: 1.3rem; line-height: 1.5; margin: 0 0 4px; font-weight: 700; }
+  .desc { color: var(--muted); margin: 0 0 8px; }
+  ul.info { padding-inline-start: 20px; margin: 10px 0 14px; }
+  ul.info li { margin-bottom: 4px; }
+  .q { padding: 20px 0; border-top: 1px solid var(--rule); }
+  .q:first-of-type { border-top: 0; padding-top: 12px; }
+  .qtext { margin: 0 0 12px; font-weight: 600; }
   .q.missing .qtext { color: var(--error); }
-  .qtext { margin: 0 0 10px; font-weight: 600; }
-  .opts { display: flex; flex-wrap: wrap; gap: 8px; }
-  .opts.vertical { flex-direction: column; }
-  .opts label { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 10px;
-                padding: 9px 12px; cursor: pointer; min-height: 44px; flex: 1 1 auto; }
-  .opts label:has(input:checked) { border-color: var(--accent); background: var(--accent-weak); }
-  .opts input { accent-color: var(--accent); width: 18px; height: 18px; margin: 0; }
-  select { width: 100%; font: inherit; padding: 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--text); }
-  .nav { display: flex; gap: 10px; justify-content: space-between; margin-top: 8px; }
-  button { font: inherit; border: 0; border-radius: 10px; padding: 12px 22px; cursor: pointer; min-height: 46px; }
-  .primary { background: var(--accent); color: #fff; }
-  .secondary { background: transparent; color: var(--text); border: 1px solid var(--line); }
+  .q.missing .qtext::before { content: "● "; }
+  .opts { display: grid; gap: 8px; grid-template-columns: 1fr; }
+  .opts label { display: flex; align-items: center; gap: 10px; border: 1px solid var(--rule); border-radius: 10px;
+                padding: 10px 14px; cursor: pointer; min-height: 48px; background: var(--sheet); line-height: 1.4; }
+  @media (hover: hover) { .opts label:hover { border-color: var(--green); } }
+  .opts label:has(input:checked) { border-color: var(--green); background: var(--green-tint); font-weight: 600; }
+  .opts input { accent-color: var(--green); width: 20px; height: 20px; margin: 0; flex: none; }
+  .opts label:has(input:focus-visible) { outline: 3px solid var(--green); outline-offset: 2px; }
+  @media (min-width: 640px) {
+    .opts.row { grid-auto-flow: column; grid-auto-columns: 1fr; grid-template-columns: none; }
+    .opts.row label { flex-direction: column; justify-content: flex-start; text-align: center; gap: 6px;
+                      padding: 12px 6px 10px; font-size: .92rem; min-height: 84px; }
+    .opts.short { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+  }
+  .opts.short:not(.row) { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+  .scenario-context { margin: 0 0 10px; }
+  .dialog { background: var(--dialog); border: 1px solid var(--dialog-edge); border-radius: 16px;
+            padding: 14px 16px; margin: 0 0 12px; max-width: 440px; box-shadow: 0 6px 18px -12px rgba(20, 40, 60, .45); }
+  .dialog p { margin: 0; font-size: 1.02rem; line-height: 1.7; }
+  .scenario-note { margin: 0 0 10px; color: var(--muted); }
+  select { width: 100%; font: inherit; padding: 12px; border-radius: 10px; border: 1px solid var(--rule);
+           background: var(--sheet); color: var(--ink); min-height: 48px; }
+  select:focus-visible, button:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
+  .nav { display: flex; gap: 10px; justify-content: space-between; align-items: center; margin-top: 18px;
+         padding-top: 16px; border-top: 1px solid var(--rule); }
+  button { font: inherit; font-weight: 600; border-radius: 10px; padding: 12px 26px; cursor: pointer; min-height: 48px; }
+  .primary { background: var(--green); color: var(--green-ink); border: 1px solid var(--green); }
+  .secondary { background: transparent; color: var(--ink); border: 1px solid var(--rule); }
   button:disabled { opacity: .55; cursor: default; }
-  .err { color: var(--error); margin: 10px 0 0; min-height: 1em; }
-  .hidden { display: none; }
+  .err { color: var(--error); margin: 12px 0 0; }
+  .err:empty { display: none; }
   .center { text-align: center; }
+  .contact { color: var(--muted); font-size: .95rem; margin: 0; }
+  @media (max-width: 639px) {
+    body { font-size: 16.5px; }
+    h1 { font-size: 1.4rem; }
+    .sheet { padding: 20px 16px; border-radius: 12px; }
+    main { padding: 14px 10px 32px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .track > div { transition: none; } }
 </style>
 </head>
 <body>
+<header class="top">
+  <div class="top-inner">
+    <span class="brand">دراسة عن الخدمات الرقمية والبيانات الشخصية</span>
+    <span class="step" id="step"></span>
+  </div>
+  <div class="track" aria-hidden="true"><div id="bar"></div></div>
+</header>
 <main>
-  <div class="progress" aria-hidden="true"><div id="bar"></div></div>
   <div id="app"></div>
-  <noscript><div class="card">يتطلب هذا الاستبيان تفعيل JavaScript في المتصفح.</div></noscript>
+  <noscript><div class="sheet">يتطلب هذا الاستبيان تفعيل JavaScript في المتصفح.</div></noscript>
 </main>
 
 <script>
@@ -74,9 +115,9 @@ const num = labels => labels.map((l,i) => [String(i+1), l]);
 
 /* Each page: {title, desc, items:[{id, text, opts:[[value,label]], type:'radio'|'select', vertical}]} */
 const scenarios = [
-  {id:"S_M", text:"تسجّل في تطبيق جديد لتوصيل الطعام لتطلب وجبة. قبل إكمال التسجيل تظهر رسالة: «هل توافق على استخدام رقم جوالك وبريدك الإلكتروني لإرسال عروض ترويجية تناسبك؟» رفضك لا يؤثر على طلبك. ما مدى احتمال رفضك؟", opts:num(SC), vertical:true},
-  {id:"S_H", text:"تحجز موعداً عند طبيب عبر تطبيق. قبل تأكيد الحجز تظهر رسالة: «هل تسمح للتطبيق بالاطلاع على قائمة أمراضك المزمنة وأدويتك لتقديم توصيات صحية تناسبك؟» الحجز لا يحتاج هذه البيانات، ورفضك لا يؤثر عليه. ما مدى احتمال رفضك؟", opts:num(SC), vertical:true},
-  {id:"S_E", text:"تُكمل عملية شراء من متجر إلكتروني. عند صفحة الدفع تظهر رسالة: «هل تسمح للمتجر بحفظ سجل تصفحك ومشترياتك لعرض منتجات تناسبك؟» رفضك لا يؤثر على عملية الشراء. ما مدى احتمال رفضك؟", opts:num(SC), vertical:true}
+  {id:"S_M", scenario:true, text:"تسجّل في تطبيق جديد لتوصيل الطعام لتطلب وجبة. قبل إكمال التسجيل تظهر رسالة: «هل توافق على استخدام رقم جوالك وبريدك الإلكتروني لإرسال عروض ترويجية تناسبك؟» رفضك لا يؤثر على طلبك. ما مدى احتمال رفضك؟", opts:num(SC), row:true},
+  {id:"S_H", scenario:true, text:"تحجز موعداً عند طبيب عبر تطبيق. قبل تأكيد الحجز تظهر رسالة: «هل تسمح للتطبيق بالاطلاع على قائمة أمراضك المزمنة وأدويتك لتقديم توصيات صحية تناسبك؟» الحجز لا يحتاج هذه البيانات، ورفضك لا يؤثر عليه. ما مدى احتمال رفضك؟", opts:num(SC), row:true},
+  {id:"S_E", scenario:true, text:"تُكمل عملية شراء من متجر إلكتروني. عند صفحة الدفع تظهر رسالة: «هل تسمح للمتجر بحفظ سجل تصفحك ومشترياتك لعرض منتجات تناسبك؟» رفضك لا يؤثر على عملية الشراء. ما مدى احتمال رفضك؟", opts:num(SC), row:true}
 ];
 // Random scenario order per participant (Fisher–Yates), recorded in the data.
 for (let i = scenarios.length - 1; i > 0; i--) {
@@ -94,49 +135,49 @@ const PAGES = [
     {id:"D5", text:"متوسط استخدامك اليومي للإنترنت", opts:[["1","أقل من ساعتين"],["2","من 2 إلى 4 ساعات"],["3","من 4 إلى 6 ساعات"],["4","أكثر من 6 ساعات"]]}
   ]},
   {title:"استخدامك للخدمات الرقمية", desc:"إلى أي مدى توافق على كل عبارة من العبارات التالية؟", items:[
-    {id:"B_M", text:"عندما يطلب تطبيق أو متجر رقمي إذناً لإرسال عروض ترويجية، أرفض عادةً.", opts:num(AG5)},
-    {id:"B_H", text:"قبل استخدام تطبيق صحي (مواعيد، لياقة، أدوية)، أراجع ما البيانات التي يطلبها وأرفض غير الضروري.", opts:num(AG5)},
-    {id:"B_E", text:"عند التسوق الإلكتروني، أتحقق من سياسة الخصوصية أو موثوقية المتجر قبل إدخال بياناتي.", opts:num(AG5)}
+    {id:"B_M", text:"عندما يطلب تطبيق أو متجر رقمي إذناً لإرسال عروض ترويجية، أرفض عادةً.", opts:num(AG5), row:true},
+    {id:"B_H", text:"قبل استخدام تطبيق صحي (مواعيد، لياقة، أدوية)، أراجع ما البيانات التي يطلبها وأرفض غير الضروري.", opts:num(AG5), row:true},
+    {id:"B_E", text:"عند التسوق الإلكتروني، أتحقق من سياسة الخصوصية أو موثوقية المتجر قبل إدخال بياناتي.", opts:num(AG5), row:true}
   ]},
   {title:"مواقف افتراضية", desc:"تخيّل أنك في كل موقف من المواقف التالية، واختر ما ستفعله على الأرجح.", items: scenarios},
   {title:"آراؤك حول بياناتك", desc:"إلى أي مدى توافق على كل عبارة من العبارات التالية؟", items:[
-    {id:"C_M1", text:"يقلقني استخدام جهات تجارية لرقم جوالي أو بريدي في التسويق دون إذن واضح مني.", opts:num(AG5)},
-    {id:"C_M2", text:"يقلقني أن تطلب التطبيقات بيانات تواصلي لأغراض تسويقية لا علاقة لها بالخدمة التي أستخدمها.", opts:num(AG5)},
-    {id:"C_H1", text:"يقلقني جمع التطبيقات لبيانات عن صحتي أكثر مما تحتاجه الخدمة فعلياً.", opts:num(AG5)},
-    {id:"C_H2", text:"يقلقني أن تُستخدم معلوماتي الصحية لأغراض غير تقديم الخدمة الطبية التي طلبتها.", opts:num(AG5)},
-    {id:"C_E1", text:"يقلقني أن تحتفظ المتاجر الإلكترونية بسجل تصفحي ومشترياتي لاستخدامه في عرض منتجات عليّ.", opts:num(AG5)},
-    {id:"C_E2", text:"يقلقني احتفاظ المتاجر الإلكترونية ببياناتي بعد انتهاء حاجتها إليها.", opts:num(AG5)}
+    {id:"C_M1", text:"يقلقني استخدام جهات تجارية لرقم جوالي أو بريدي في التسويق دون إذن واضح مني.", opts:num(AG5), row:true},
+    {id:"C_M2", text:"يقلقني أن تطلب التطبيقات بيانات تواصلي لأغراض تسويقية لا علاقة لها بالخدمة التي أستخدمها.", opts:num(AG5), row:true},
+    {id:"C_H1", text:"يقلقني جمع التطبيقات لبيانات عن صحتي أكثر مما تحتاجه الخدمة فعلياً.", opts:num(AG5), row:true},
+    {id:"C_H2", text:"يقلقني أن تُستخدم معلوماتي الصحية لأغراض غير تقديم الخدمة الطبية التي طلبتها.", opts:num(AG5), row:true},
+    {id:"C_E1", text:"يقلقني أن تحتفظ المتاجر الإلكترونية بسجل تصفحي ومشترياتي لاستخدامه في عرض منتجات عليّ.", opts:num(AG5), row:true},
+    {id:"C_E2", text:"يقلقني احتفاظ المتاجر الإلكترونية ببياناتي بعد انتهاء حاجتها إليها.", opts:num(AG5), row:true}
   ]},
   {title:"الخصوصية على الإنترنت", desc:"إلى أي مدى توافق على كل عبارة من العبارات التالية؟", items:[
-    {id:"G1", text:"خصوصية المستهلك على الإنترنت هي في حقيقتها مسألة حق المستهلك في ممارسة التحكم والاستقلالية في القرارات المتعلقة بكيفية جمع معلوماته واستخدامها ومشاركتها.", opts:num(AG7), vertical:true},
-    {id:"G2", text:"يقع تحكّم المستهلك في معلوماته الشخصية في صميم خصوصيته.", opts:num(AG7), vertical:true},
-    {id:"G3", text:"ينبغي للشركات التي تطلب المعلومات عبر الإنترنت أن تُفصح عن طريقة جمع البيانات ومعالجتها واستخدامها.", opts:num(AG7), vertical:true},
-    {id:"G4", text:"ينبغي أن تتضمن سياسة الخصوصية الجيدة للمستهلك على الإنترنت إفصاحاً واضحاً وبارزاً.", opts:num(AG7), vertical:true},
-    {id:"AC1", text:"للتأكد من قراءتك للأسئلة، اختر «أوافق بشدة» في هذه العبارة.", opts:num(AG7), vertical:true},
-    {id:"G5", text:"يضايقني عادةً أن تطلب مني الشركات عبر الإنترنت معلومات شخصية.", opts:num(AG7), vertical:true},
-    {id:"G6", text:"عندما تطلب مني الشركات عبر الإنترنت معلومات شخصية، أفكر أحياناً مرتين قبل تقديمها.", opts:num(AG7), vertical:true},
-    {id:"G7", text:"يضايقني أن أقدّم معلوماتي الشخصية لهذا العدد الكبير من الشركات عبر الإنترنت.", opts:num(AG7), vertical:true},
-    {id:"G8", text:"يقلقني أن الشركات عبر الإنترنت تجمع عني معلومات شخصية أكثر من اللازم.", opts:num(AG7), vertical:true}
+    {id:"G1", text:"خصوصية المستهلك على الإنترنت هي في حقيقتها مسألة حق المستهلك في ممارسة التحكم والاستقلالية في القرارات المتعلقة بكيفية جمع معلوماته واستخدامها ومشاركتها.", opts:num(AG7), row:true},
+    {id:"G2", text:"يقع تحكّم المستهلك في معلوماته الشخصية في صميم خصوصيته.", opts:num(AG7), row:true},
+    {id:"G3", text:"ينبغي للشركات التي تطلب المعلومات عبر الإنترنت أن تُفصح عن طريقة جمع البيانات ومعالجتها واستخدامها.", opts:num(AG7), row:true},
+    {id:"G4", text:"ينبغي أن تتضمن سياسة الخصوصية الجيدة للمستهلك على الإنترنت إفصاحاً واضحاً وبارزاً.", opts:num(AG7), row:true},
+    {id:"AC1", text:"للتأكد من قراءتك للأسئلة، اختر «أوافق بشدة» في هذه العبارة.", opts:num(AG7), row:true},
+    {id:"G5", text:"يضايقني عادةً أن تطلب مني الشركات عبر الإنترنت معلومات شخصية.", opts:num(AG7), row:true},
+    {id:"G6", text:"عندما تطلب مني الشركات عبر الإنترنت معلومات شخصية، أفكر أحياناً مرتين قبل تقديمها.", opts:num(AG7), row:true},
+    {id:"G7", text:"يضايقني أن أقدّم معلوماتي الشخصية لهذا العدد الكبير من الشركات عبر الإنترنت.", opts:num(AG7), row:true},
+    {id:"G8", text:"يقلقني أن الشركات عبر الإنترنت تجمع عني معلومات شخصية أكثر من اللازم.", opts:num(AG7), row:true}
   ]},
   {title:"طلبات الموافقة", desc:"خلال الأشهر الستة الماضية، كم مرة واجهت ما يلي؟", items:[
-    {id:"F_M", text:"تطلب مني التطبيقات أو المتاجر الموافقة على استقبال رسائل أو عروض ترويجية.", opts:num(FR)},
-    {id:"F_H", text:"تطلب مني التطبيقات الصحية أو تطبيقات المواعيد الطبية الموافقة على الوصول إلى بياناتي الصحية.", opts:num(FR)},
-    {id:"F_E", text:"تطلب مني المتاجر الإلكترونية الموافقة على حفظ بياناتي أو على ملفات تعريف الارتباط (الكوكيز).", opts:num(FR)}
+    {id:"F_M", text:"تطلب مني التطبيقات أو المتاجر الموافقة على استقبال رسائل أو عروض ترويجية.", opts:num(FR), row:true},
+    {id:"F_H", text:"تطلب مني التطبيقات الصحية أو تطبيقات المواعيد الطبية الموافقة على الوصول إلى بياناتي الصحية.", opts:num(FR), row:true},
+    {id:"F_E", text:"تطلب مني المتاجر الإلكترونية الموافقة على حفظ بياناتي أو على ملفات تعريف الارتباط (الكوكيز).", opts:num(FR), row:true}
   ]},
   {title:"نظام حماية البيانات الشخصية", desc:"إلى أي مدى توافق على كل عبارة من العبارات التالية؟", items:[
-    {id:"K1", text:"أعلم بوجود نظام سعودي لحماية البيانات الشخصية.", opts:num(AG5)},
-    {id:"K2", text:"أعرف الجهة الحكومية التي يمكنني تقديم شكوى إليها إذا أُسيء استخدام بياناتي.", opts:num(AG5)},
-    {id:"K3", text:"أعرف حقوقي النظامية تجاه الجهات التي تجمع بياناتي الشخصية.", opts:num(AG5)}
+    {id:"K1", text:"أعلم بوجود نظام سعودي لحماية البيانات الشخصية.", opts:num(AG5), row:true},
+    {id:"K2", text:"أعرف الجهة الحكومية التي يمكنني تقديم شكوى إليها إذا أُسيء استخدام بياناتي.", opts:num(AG5), row:true},
+    {id:"K3", text:"أعرف حقوقي النظامية تجاه الجهات التي تجمع بياناتي الشخصية.", opts:num(AG5), row:true}
   ]},
   {title:"ما تعرفه عن النظام", desc:"حدّد ما إذا كانت كل عبارة صحيحة أم خاطئة وفق نظام حماية البيانات الشخصية في المملكة. إذا لم تكن متأكداً، اختر «لا أعرف» ولا تخمّن.", items:[
-    {id:"K4",  text:"يحق لي سحب موافقتي على معالجة بياناتي في أي وقت.", opts:TF},
-    {id:"K5",  text:"يجوز للجهة الاحتفاظ ببياناتي الشخصية بعد انتهاء الغرض من جمعها دون أي قيد.", opts:TF},
-    {id:"K6",  text:"يحق لي أن أطلب من الجهة نسخة من بياناتي الشخصية التي تحتفظ بها.", opts:TF},
-    {id:"K7",  text:"يحق للشركات نقل بياناتي إلى خارج المملكة بحرية دون أي شروط.", opts:TF},
-    {id:"K8",  text:"يجب أن تُبلغني الجهة بالغرض من جمع بياناتي عند جمعها أو قبله.", opts:TF},
-    {id:"K9",  text:"يجوز استخدام بياناتي الصحية لأغراض تسويقية إذا وافقت على ذلك.", opts:TF},
-    {id:"K10", text:"يمكنني تقديم شكوى إلى الجهة المختصة إذا خالفت جهةٌ النظام في التعامل مع بياناتي.", opts:TF},
-    {id:"K11", text:"يكفي أن تعالج الجهة تسرّب بياناتي داخلياً دون إبلاغ الجهة المختصة.", opts:TF}
+    {id:"K4",  text:"يحق لي سحب موافقتي على معالجة بياناتي في أي وقت.", opts:TF, row:true},
+    {id:"K5",  text:"يجوز للجهة الاحتفاظ ببياناتي الشخصية بعد انتهاء الغرض من جمعها دون أي قيد.", opts:TF, row:true},
+    {id:"K6",  text:"يحق لي أن أطلب من الجهة نسخة من بياناتي الشخصية التي تحتفظ بها.", opts:TF, row:true},
+    {id:"K7",  text:"يحق للشركات نقل بياناتي إلى خارج المملكة بحرية دون أي شروط.", opts:TF, row:true},
+    {id:"K8",  text:"يجب أن تُبلغني الجهة بالغرض من جمع بياناتي عند جمعها أو قبله.", opts:TF, row:true},
+    {id:"K9",  text:"يجوز استخدام بياناتي الصحية لأغراض تسويقية إذا وافقت على ذلك.", opts:TF, row:true},
+    {id:"K10", text:"يمكنني تقديم شكوى إلى الجهة المختصة إذا خالفت جهةٌ النظام في التعامل مع بياناتي.", opts:TF, row:true},
+    {id:"K11", text:"يكفي أن تعالج الجهة تسرّب بياناتي داخلياً دون إبلاغ الجهة المختصة.", opts:TF, row:true}
   ]}
 ];
 
@@ -145,6 +186,7 @@ let page = -1;           // -1 = welcome/consent
 const startedAt = Date.now();
 const app = document.getElementById("app");
 const bar = document.getElementById("bar");
+const stepEl = document.getElementById("step");
 
 function el(tag, attrs = {}, text) {
   const e = document.createElement(tag);
@@ -159,8 +201,9 @@ function alreadySubmitted() {
 
 function renderWelcome() {
   bar.style.width = "0%";
+  stepEl.textContent = "";
   app.replaceChildren();
-  const c = el("div", {class:"card"});
+  const c = el("div", {class:"sheet"});
   c.append(el("h1", {}, "دراسة عن استخدام الخدمات الرقمية والتعامل مع البيانات الشخصية"));
   c.append(el("p", {}, "مرحباً بك، وشكراً لاهتمامك بالمشاركة."));
   c.append(el("p", {}, "تهدف هذه الدراسة إلى فهم العلاقة بين قلق الأفراد على خصوصية بياناتهم الشخصية في الخدمات الرقمية، وسلوكهم في حمايتها، ومعرفتهم بنظام حماية البيانات الشخصية في المملكة العربية السعودية. يجري الدراسة " + CONFIG.RESEARCHER + "."));
@@ -173,10 +216,10 @@ function renderWelcome() {
     "لا توجد إجابات صحيحة أو خاطئة في الأسئلة عن رأيك وسلوكك؛ يُرجى الإجابة بما يعبّر عنك فعلاً."
   ].forEach(t => ul.append(el("li", {}, t)));
   c.append(ul);
-  c.append(el("p", {class:"desc"}, "للاستفسار: " + CONFIG.EMAIL));
+  c.append(el("p", {class:"contact"}, "للاستفسار: " + CONFIG.EMAIL));
   app.append(c);
 
-  const g = el("div", {class:"card"});
+  const g = el("div", {class:"sheet"});
   g.append(el("h2", {}, "الموافقة على المشاركة"));
   g.append(question({id:"consent", text:"هل توافق على المشاركة في هذه الدراسة؟", opts:[["1","أوافق"],["0","لا أوافق"]]}));
   g.append(question({id:"age18", text:"هل عمرك 18 سنة فأكثر؟", opts:[["1","نعم"],["0","لا"]]}));
@@ -196,24 +239,38 @@ function renderWelcome() {
   app.append(g);
 }
 
-function question(q) {
+function question(q, onAnswer) {
   const box = el("div", {class:"q", "data-q":q.id});
-  const label = el("p", {class:"qtext", id:"lbl_" + q.id}, q.text);
-  box.append(label);
+  const lblId = "lbl_" + q.id;
+  if (q.scenario) {
+    const a = q.text.indexOf("«"), b = q.text.indexOf("»");
+    const tail = q.text.slice(b + 1).trim();
+    const lastStop = tail.lastIndexOf(".");
+    box.append(el("p", {class:"scenario-context"}, q.text.slice(0, a).trim()));
+    const d = el("div", {class:"dialog", role:"note"});
+    d.append(el("p", {}, q.text.slice(a + 1, b).trim()));
+    box.append(d);
+    if (lastStop > -1) box.append(el("p", {class:"scenario-note"}, tail.slice(0, lastStop + 1).trim()));
+    box.append(el("p", {class:"qtext", id:lblId}, lastStop > -1 ? tail.slice(lastStop + 1).trim() : tail));
+  } else {
+    box.append(el("p", {class:"qtext", id:lblId}, q.text));
+  }
+  const done = () => { box.classList.remove("missing"); if (onAnswer) onAnswer(); };
   if (q.type === "select") {
-    const s = el("select", {"aria-labelledby":"lbl_" + q.id});
-    s.append(el("option", {value:""}, "اختر…"));
+    const s = el("select", {"aria-labelledby":lblId});
+    s.append(el("option", {value:""}, "اختر المنطقة"));
     q.opts.forEach(([v, t]) => s.append(el("option", {value:v}, t)));
     if (answers[q.id]) s.value = answers[q.id];
-    s.addEventListener("change", () => { answers[q.id] = s.value || undefined; box.classList.remove("missing"); });
+    s.addEventListener("change", () => { answers[q.id] = s.value || undefined; done(); });
     box.append(s);
   } else {
-    const opts = el("div", {class:"opts" + (q.vertical ? " vertical" : ""), role:"radiogroup", "aria-labelledby":"lbl_" + q.id});
+    const cls = "opts" + (q.row ? " row" : "") + (!q.row && !q.vertical && q.opts.length <= 4 ? " short" : "");
+    const opts = el("div", {class:cls, role:"radiogroup", "aria-labelledby":lblId});
     q.opts.forEach(([v, t]) => {
       const lab = el("label");
       const inp = el("input", {type:"radio", name:q.id, value:v});
       if (answers[q.id] === v) inp.checked = true;
-      inp.addEventListener("change", () => { answers[q.id] = v; box.classList.remove("missing"); });
+      inp.addEventListener("change", () => { answers[q.id] = v; done(); });
       lab.append(inp, el("span", {}, t));
       opts.append(lab);
     });
@@ -233,12 +290,14 @@ function markMissing(container, ids) {
 function renderPage() {
   const p = PAGES[page];
   bar.style.width = Math.round((page / PAGES.length) * 100) + "%";
+  stepEl.textContent = "القسم " + (page + 1) + " من " + PAGES.length;
   app.replaceChildren();
-  const c = el("div", {class:"card"});
+  const c = el("div", {class:"sheet"});
   c.append(el("h2", {}, p.title));
   if (p.desc) c.append(el("p", {class:"desc"}, p.desc));
-  p.items.forEach(q => c.append(question(q)));
   const err = el("p", {class:"err", role:"alert"});
+  const clearIfDone = () => { if (p.items.every(q => answers[q.id])) err.textContent = ""; };
+  p.items.forEach(q => c.append(question(q, clearIfDone)));
   c.append(err);
   const nav = el("div", {class:"nav"});
   const back = el("button", {class:"secondary", type:"button"}, "السابق");
@@ -297,8 +356,9 @@ async function submit(btn, err) {
 
 function renderEnd(completed) {
   bar.style.width = completed ? "100%" : "0%";
+  stepEl.textContent = "";
   app.replaceChildren();
-  const c = el("div", {class:"card center"});
+  const c = el("div", {class:"sheet center"});
   if (completed) {
     c.append(el("h2", {}, "شكراً لمشاركتك"));
     c.append(el("p", {}, "لا تتضمن إجابتك أي بيانات شخصية. لمعرفة المزيد عن حقوقك في حماية بياناتك الشخصية، يمكنك الرجوع إلى موقع الهيئة السعودية للبيانات والذكاء الاصطناعي (سدايا)."));
@@ -312,7 +372,7 @@ function renderEnd(completed) {
 
 if (alreadySubmitted()) {
   app.replaceChildren();
-  const c = el("div", {class:"card center"});
+  const c = el("div", {class:"sheet center"});
   c.append(el("h2", {}, "تم استلام مشاركتك"));
   c.append(el("p", {}, "شكراً لك. سُجّلت مشاركة سابقة من هذا المتصفح."));
   app.append(c);
