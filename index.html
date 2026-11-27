@@ -109,8 +109,10 @@
     .sheet + .sheet { margin-top: 8px; border-top: 1px solid var(--border); padding-top: 20px; }
     h1 { font-size: 1.3rem; }
     h2 { font-size: 1.15rem; }
-    .q { padding: 18px 0; }
-    .opts label { padding: 10px 12px; min-height: 48px; }
+    .q { padding: 16px 0; }
+    .opts, .opts.short:not(.row) { grid-template-columns: 1fr; }
+    .opts label { padding: 10px 14px; min-height: 48px; }
+    .qtext { margin-bottom: 10px; }
     main { padding-bottom: calc(140px + env(safe-area-inset-bottom)); }
     .top-inner:has(.step:empty) { display: none; }
     .nav { position: static; margin-top: 20px; padding-top: 16px; }
@@ -165,7 +167,7 @@ const SCEN_ORDER = scenarios.map(s => s.id.slice(2)).join("-");
 
 const PAGES = [
   {title:"معلومات عامة", items:[
-    {id:"D1", text:"الفئة العمرية", opts:[["1","18–24"],["2","25–34"],["3","35–44"],["4","45 فأكثر"]]},
+    {id:"D1", text:"الفئة العمرية", opts:[["1","من 18 إلى 24 سنة"],["2","من 25 إلى 34 سنة"],["3","من 35 إلى 44 سنة"],["4","45 سنة فأكثر"]]},
     {id:"D2", text:"الجنس", opts:[["1","ذكر"],["2","أنثى"],["9","أفضّل عدم الإجابة"]]},
     {id:"D3", text:"أعلى مؤهل تعليمي", opts:[["1","ثانوي فأقل"],["2","دبلوم"],["3","بكالوريوس"],["4","دراسات عليا"]]},
     {id:"D4", text:"منطقة الإقامة", type:"select", opts:[["1","الرياض"],["2","مكة المكرمة"],["3","المدينة المنورة"],["4","القصيم"],["5","المنطقة الشرقية"],["6","عسير"],["7","تبوك"],["8","حائل"],["9","الحدود الشمالية"],["10","جازان"],["11","نجران"],["12","الباحة"],["13","الجوف"]]},
