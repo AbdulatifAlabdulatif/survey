@@ -70,7 +70,7 @@
   .opts label:has(input:checked) { border-color: var(--primary); background: var(--primary-tint); font-weight: 600; }
   .opts input { accent-color: var(--primary); width: 20px; height: 20px; margin: 0; flex: none; }
   .opts label:has(input:focus-visible) { outline: 2px solid var(--primary); outline-offset: 2px; }
-  @media (min-width: 760px) and (pointer: fine) {
+  @media (min-width: 900px) and (hover: hover) and (pointer: fine) {
     .opts.row { grid-auto-flow: column; grid-auto-columns: 1fr; grid-template-columns: none; }
     .opts.row label { flex-direction: column; justify-content: flex-start; text-align: center; gap: 6px;
                       padding: 12px 6px 10px; font-size: .9rem; min-height: 84px; }
@@ -82,6 +82,27 @@
   .sheet.single .q { padding: 8px 0 0; border-top: 0; }
   .sheet.single .qtext { font-size: 1.125rem; }
   .sheet.single .nav { margin-top: 16px; }
+  @media (min-width: 900px) and (hover: hover) and (pointer: fine) {
+    main, .top-inner, footer.site { max-width: 960px; }
+    .sheet:not(.single) > .q { display: grid; grid-template-columns: 24% 1fr; gap: 16px; align-items: center; padding: 14px 0; }
+    .sheet:not(.single) > .q .qtext { margin: 0; }
+  }
+  .matrix-wrap { margin-top: 12px; }
+  table.matrix { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+  table.matrix thead th { font-size: .8125rem; font-weight: 600; color: var(--text-2); text-align: center;
+                          vertical-align: bottom; padding: 0 4px 8px; line-height: 1.35; border-bottom: 1px solid var(--border); }
+  table.matrix th.stmt-h { width: 46%; }
+  table.matrix tbody tr { background: var(--surface); }
+  table.matrix tbody tr:nth-child(even) { background: var(--bg); }
+  table.matrix th.stmt { text-align: start; font-weight: 500; font-size: .9375rem; line-height: 1.5;
+                         padding: 10px 0 10px 12px; margin: 0; border-bottom: 1px solid var(--border); }
+  table.matrix td { text-align: center; border-bottom: 1px solid var(--border); padding: 0; }
+  table.matrix label.cell { display: flex; align-items: center; justify-content: center; min-height: 44px; cursor: pointer; }
+  table.matrix input { accent-color: var(--primary); width: 20px; height: 20px; margin: 0; cursor: pointer; }
+  @media (hover: hover) { table.matrix tbody tr:hover { background: var(--primary-tint); } }
+  table.matrix tr.missing { background: var(--error-tint) !important; }
+  table.matrix tr.missing th.stmt { color: var(--error); }
+  table.matrix input:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
   .scenario-context { margin: 0 0 12px; }
   .dialog { background: var(--dialog); border: 1px solid var(--border); border-inline-start: 4px solid var(--primary);
             border-radius: var(--r-md); padding: 14px 16px; margin: 0 0 12px; }
@@ -105,7 +126,7 @@
   .contact a { color: var(--primary); }
   footer.site { max-width: 760px; margin: 0 auto; padding: 0 24px 32px; color: var(--text-2); font-size: .875rem; }
   @media (max-height: 500px) { .top { position: static; } }
-  @media (max-width: 759px), (pointer: coarse) {
+  @media (max-width: 899px), (hover: none), (pointer: coarse) {
     body { background: var(--surface); }
     .top-inner { padding: 10px 16px; min-height: 48px; }
     .brand { display: none; }
@@ -136,7 +157,7 @@
     .nav button { flex: 1 1 0; min-width: 0; width: 100%; }
     footer.site { padding: 0 16px 24px; }
   }
-  @media (max-height: 620px) and ((max-width: 759px) or (pointer: coarse)) {
+  @media (max-height: 620px) and ((max-width: 899px) or (hover: none) or (pointer: coarse)) {
     .sheet.single .opts label { min-height: 38px; padding: 4px 12px; }
     .sheet.single .dialog p, .sheet.single .scenario-context, .sheet.single .scenario-note { font-size: .875rem; }
     .top-inner { min-height: 40px; padding-block: 6px; }
@@ -190,7 +211,7 @@ const SCEN_ORDER = scenarios.map(s => s.id.slice(2)).join("-");
 const PAGES = [
   {title:"معلومات عامة", items:[
     {id:"D1", text:"الفئة العمرية", opts:[["1","من 18 إلى 24 سنة"],["2","من 25 إلى 34 سنة"],["3","من 35 إلى 44 سنة"],["4","45 سنة فأكثر"]]},
-    {id:"D2", text:"الجنس", opts:[["1","ذكر"],["2","أنثى"],["9","أفضّل عدم الإجابة"]]},
+    {id:"D2", text:"الجنس", opts:[["1","ذكر"],["2","أنثى"]]},
     {id:"D3", text:"أعلى مؤهل تعليمي", opts:[["1","ثانوي فأقل"],["2","دبلوم"],["3","بكالوريوس"],["4","دراسات عليا"]]},
     {id:"D4", text:"منطقة الإقامة", type:"select", opts:[["1","الرياض"],["2","مكة المكرمة"],["3","المدينة المنورة"],["4","القصيم"],["5","المنطقة الشرقية"],["6","عسير"],["7","تبوك"],["8","حائل"],["9","الحدود الشمالية"],["10","جازان"],["11","نجران"],["12","الباحة"],["13","الجوف"]]},
     {id:"D5", text:"متوسط استخدامك اليومي للإنترنت", opts:[["1","أقل من ساعتين"],["2","من 2 إلى 4 ساعات"],["3","من 4 إلى 6 ساعات"],["4","أكثر من 6 ساعات"]]}
@@ -286,7 +307,7 @@ function renderWelcome() {
     markMissing(g, missing);
     if (missing.length) { err.textContent = "يُرجى الإجابة عن السؤالين للمتابعة."; return; }
     if (answers.consent !== "1" || answers.age18 !== "1") return renderEnd(false);
-    page = 0; renderPage();
+    page = 0; renderPage(); window.scrollTo(0, 0);
   });
   nav.append(start);
   g.append(nav);
@@ -341,20 +362,66 @@ function markMissing(container, ids) {
   }
 }
 
-// One question per screen on all devices.
-const COMPACT = window.matchMedia("(max-width: 759px), (pointer: coarse)").matches;
-const ONE_PER_SCREEN = true;   // every device: one question per screen, no scrolling
-const SCREENS = ONE_PER_SCREEN
+// Layout by device type. A device counts as a computer only if it has a
+// mouse or trackpad (hover + fine pointer) AND a window at least 900px wide.
+// Computers: one section per screen, with rating scales shown as a matrix.
+// Phones and tablets: one question per screen, advancing automatically.
+const DESKTOP = window.matchMedia("(min-width: 900px) and (hover: hover) and (pointer: fine)").matches;
+const COMPACT = !DESKTOP;
+const ONE_PER_SCREEN = true;   // kept for the resize listener below
+const SCREENS = COMPACT
   ? PAGES.flatMap(p => p.items.map(it => ({title: p.title, desc: p.desc, items: [it]})))
-  : PAGES;
+  : PAGES.flatMap(p => {
+      if (p.items.some(it => it.scenario))   // scenarios: one per screen
+        return p.items.map(it => ({title: p.title, desc: p.desc, items: [it]}));
+      const MAX_ROWS = 6;                     // long matrices are split evenly
+      const parts = Math.ceil(p.items.length / MAX_ROWS);
+      const size = Math.ceil(p.items.length / parts);
+      const out = [];
+      for (let i = 0; i < p.items.length; i += size) out.push({title: p.title, desc: p.desc, items: p.items.slice(i, i + size)});
+      return out;
+    });
+
+function sameScale(items) {
+  if (items.length < 2 || items.some(q => q.type === "select" || q.scenario)) return false;
+  const key = JSON.stringify(items[0].opts);
+  return items.every(q => JSON.stringify(q.opts) === key);
+}
+
+function matrix(items, onAnswer) {
+  const wrap = el("div", {class:"matrix-wrap"});
+  const table = el("table", {class:"matrix"});
+  const thead = el("thead"); const hr = el("tr");
+  hr.append(el("th", {class:"stmt-h", scope:"col"}, ""));
+  items[0].opts.forEach(([, label]) => hr.append(el("th", {scope:"col"}, label)));
+  thead.append(hr); table.append(thead);
+  const tbody = el("tbody");
+  items.forEach(q => {
+    const tr = el("tr", {class:"q", "data-q":q.id});
+    tr.append(el("th", {class:"stmt qtext", scope:"row", id:"lbl_" + q.id}, q.text));
+    q.opts.forEach(([v, label]) => {
+      const td = el("td");
+      const lab = el("label", {class:"cell"});
+      const inp = el("input", {type:"radio", name:q.id, value:v, "aria-label": label});
+      inp.setAttribute("aria-describedby", "lbl_" + q.id);
+      if (answers[q.id] === v) inp.checked = true;
+      inp.addEventListener("change", () => { answers[q.id] = v; tr.classList.remove("missing"); onAnswer(); });
+      lab.append(inp); td.append(lab); tr.append(td);
+    });
+    tbody.append(tr);
+  });
+  table.append(tbody); wrap.append(table);
+  return wrap;
+}
 
 function renderPage() {
   const p = SCREENS[page];
   const thisPage = page;
+  const single = p.items.length === 1;
   bar.style.width = Math.round((page / SCREENS.length) * 100) + "%";
-  stepEl.textContent = (ONE_PER_SCREEN ? "السؤال " : "القسم ") + (page + 1) + " من " + SCREENS.length;
+  stepEl.textContent = (COMPACT ? "السؤال " : "الصفحة ") + (page + 1) + " من " + SCREENS.length;
   app.replaceChildren();
-  const c = el("div", {class:"sheet" + (ONE_PER_SCREEN ? " single" : "")});
+  const c = el("div", {class:"sheet" + (single ? " single" : "")});
   c.append(el("h2", {}, p.title));
   if (p.desc) c.append(el("p", {class:"desc"}, p.desc));
   const err = el("p", {class:"err", role:"alert"});
@@ -363,7 +430,7 @@ function renderPage() {
     const missing = p.items.map(q => q.id).filter(id => !answers[id]);
     markMissing(c, missing);
     if (missing.length) {
-      err.textContent = ONE_PER_SCREEN ? "يُرجى اختيار إجابة للمتابعة." : "يُرجى الإجابة عن جميع الأسئلة في هذه الصفحة.";
+      err.textContent = single ? "يُرجى اختيار إجابة للمتابعة." : "يُرجى الإجابة عن جميع الأسئلة في هذه الصفحة.";
       return;
     }
     err.textContent = "";
@@ -373,9 +440,10 @@ function renderPage() {
   const onAnswer = () => {
     if (!p.items.every(q => answers[q.id])) return;
     err.textContent = "";
-    if (ONE_PER_SCREEN && !last) setTimeout(() => { if (page === thisPage) goNext(); }, 280);
+    if (COMPACT && !last) setTimeout(() => { if (page === thisPage) goNext(); }, 280);
   };
-  p.items.forEach(q => c.append(question(q, onAnswer)));
+  if (DESKTOP && sameScale(p.items)) c.append(matrix(p.items, onAnswer));
+  else p.items.forEach(q => c.append(question(q, onAnswer)));
   c.append(err);
   const nav = el("div", {class:"nav"});
   const back = el("button", {class:"secondary", type:"button"}, "السابق");
@@ -385,31 +453,33 @@ function renderPage() {
   nav.append(back, next);
   c.append(nav);
   app.append(c);
-  if (ONE_PER_SCREEN) fitToScreen();
+  fitToScreen();
+  requestAnimationFrame(fitToScreen);
 }
 
-// Shrink the current question screen (down to 76%) until every answer option
-// is visible above the browser's bottom toolbar, so no scrolling is needed.
+// Shrink the current screen (down to 72%) until it fits the visible height,
+// so no scrolling is needed. Phones: every option must sit above the browser's
+// bottom toolbar (the screen advances on its own). Computers: the whole screen,
+// buttons included, must fit.
 const TOOLBAR_ALLOWANCE = 72;
 function fitToScreen() {
-  const sheet = app.querySelector(".sheet.single");
-  if (!sheet) return;
+  const sheet = app.querySelector(".sheet");
+  if (!sheet || !sheet.querySelector(".nav")) return;
   sheet.style.zoom = "";
   const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-  // Phones: every option must sit above the browser toolbar (the screen advances on its own).
-  // Laptops and desktops: the whole screen, buttons included, must fit.
   const limit = vh - (COMPACT ? TOOLBAR_ALLOWANCE : 12);
-  const lastOption = () => {
+  const bottom = () => {
     if (!COMPACT) return sheet.querySelector(".nav").getBoundingClientRect().bottom;
     const opts = sheet.querySelectorAll(".opts label, select");
     return opts.length ? opts[opts.length - 1].getBoundingClientRect().bottom : 0;
   };
   let z = 1;
-  while (lastOption() > limit && z > 0.76) {
+  while (bottom() > limit && z > 0.72) {
     z = Math.round((z - 0.04) * 100) / 100;
     sheet.style.zoom = String(z);
   }
 }
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => fitToScreen());
 if (ONE_PER_SCREEN) {
   let fitTimer;
   const refit = () => { clearTimeout(fitTimer); fitTimer = setTimeout(fitToScreen, 120); };
