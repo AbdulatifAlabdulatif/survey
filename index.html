@@ -378,6 +378,34 @@ function renderPage() {
   nav.append(back, next);
   c.append(nav);
   app.append(c);
+  if (ONE_PER_SCREEN) fitToScreen();
+}
+
+// Shrink the current question screen (down to 76%) until every answer option
+// is visible above the browser's bottom toolbar, so no scrolling is needed.
+const TOOLBAR_ALLOWANCE = 72;
+function fitToScreen() {
+  const sheet = app.querySelector(".sheet.single");
+  if (!sheet) return;
+  sheet.style.zoom = "";
+  const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  const limit = vh - TOOLBAR_ALLOWANCE;
+  const lastOption = () => {
+    const opts = sheet.querySelectorAll(".opts label, select");
+    return opts.length ? opts[opts.length - 1].getBoundingClientRect().bottom : 0;
+  };
+  let z = 1;
+  while (lastOption() > limit && z > 0.76) {
+    z = Math.round((z - 0.04) * 100) / 100;
+    sheet.style.zoom = String(z);
+  }
+}
+if (ONE_PER_SCREEN) {
+  let fitTimer;
+  const refit = () => { clearTimeout(fitTimer); fitTimer = setTimeout(fitToScreen, 120); };
+  window.addEventListener("orientationchange", refit);
+  if (window.visualViewport) window.visualViewport.addEventListener("resize", refit);
+  else window.addEventListener("resize", refit);
 }
 
 function uuid() {
