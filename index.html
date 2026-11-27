@@ -4,25 +4,28 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>دراسة عن استخدام الخدمات الرقمية</title>
 <style>
   @font-face { font-family: "IBM Plex Sans Arabic"; font-style: normal; font-weight: 400; font-display: swap;
-    src: url("fonts/ibm-plex-sans-arabic-arabic-400-normal.woff2") format("woff2");
+    src: url("fonts/ibm-plex-sans-arabic-arabic-400-normal.woff2?v=2026-11-27.2") format("woff2");
     unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FEFC; }
   @font-face { font-family: "IBM Plex Sans Arabic"; font-style: normal; font-weight: 400; font-display: swap;
-    src: url("fonts/ibm-plex-sans-arabic-latin-400-normal.woff2") format("woff2");
+    src: url("fonts/ibm-plex-sans-arabic-latin-400-normal.woff2?v=2026-11-27.2") format("woff2");
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212, U+FEFF, U+FFFD; }
   @font-face { font-family: "IBM Plex Sans Arabic"; font-style: normal; font-weight: 600; font-display: swap;
-    src: url("fonts/ibm-plex-sans-arabic-arabic-600-normal.woff2") format("woff2");
+    src: url("fonts/ibm-plex-sans-arabic-arabic-600-normal.woff2?v=2026-11-27.2") format("woff2");
     unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FEFC; }
   @font-face { font-family: "IBM Plex Sans Arabic"; font-style: normal; font-weight: 600; font-display: swap;
-    src: url("fonts/ibm-plex-sans-arabic-latin-600-normal.woff2") format("woff2");
+    src: url("fonts/ibm-plex-sans-arabic-latin-600-normal.woff2?v=2026-11-27.2") format("woff2");
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212, U+FEFF, U+FFFD; }
   @font-face { font-family: "IBM Plex Sans Arabic"; font-style: normal; font-weight: 700; font-display: swap;
-    src: url("fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2") format("woff2");
+    src: url("fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2?v=2026-11-27.2") format("woff2");
     unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FEFC; }
   @font-face { font-family: "IBM Plex Sans Arabic"; font-style: normal; font-weight: 700; font-display: swap;
-    src: url("fonts/ibm-plex-sans-arabic-latin-700-normal.woff2") format("woff2");
+    src: url("fonts/ibm-plex-sans-arabic-latin-700-normal.woff2?v=2026-11-27.2") format("woff2");
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212, U+FEFF, U+FFFD; }
   :root {
     /* DGA Platforms Code tokens: SA green 600 = primary, neutral (gray) scale, radius 4/8 */
@@ -179,6 +182,35 @@
 </main>
 
 <script>
+/* ===== Freshness: always run the latest published version =====
+   GitHub Pages and browsers may keep an older copy of this page for a few
+   minutes. On every load the page (1) removes any service workers and Cache
+   Storage left by earlier versions, and (2) asks the server, bypassing all
+   caches, which build is current; if this copy is older, it reloads itself
+   once from a fresh address. Update BUILD here and in version.json together. */
+const BUILD = "2026-11-27.2";
+(function ensureFresh() {
+  try {
+    if ("serviceWorker" in navigator) navigator.serviceWorker.getRegistrations()
+      .then(rs => rs.forEach(r => r.unregister())).catch(() => {});
+    if (window.caches && caches.keys) caches.keys()
+      .then(ks => ks.forEach(k => caches.delete(k))).catch(() => {});
+  } catch (e) {}
+  fetch("version.json?t=" + Date.now(), {cache: "no-store"})
+    .then(r => r.ok ? r.json() : null)
+    .then(v => {
+      if (!v || !v.build || v.build === BUILD) return;
+      let tried = null;
+      try { tried = sessionStorage.getItem("pp_reload_for"); } catch (e) {}
+      if (tried === v.build) return;            // reload once per build, never loop
+      try { sessionStorage.setItem("pp_reload_for", v.build); } catch (e) {}
+      const u = new URL(location.href);
+      u.searchParams.set("v", v.build);
+      location.replace(u.toString());
+    })
+    .catch(() => {});
+})();
+
 /* ================= إعدادات يعدّلها الباحث ================= */
 const CONFIG = {
   ENDPOINT: "https://script.google.com/macros/s/AKfycbyGitJqMs1SCzuOgYJruwO75luaHKXWhmUeCh9IGAXciwgfToPHXuRu8qL2w3KLIlyWlw/exec",   // رابط Web app من Google Apps Script
