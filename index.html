@@ -25,17 +25,19 @@
     src: url("fonts/ibm-plex-sans-arabic-latin-700-normal.woff2") format("woff2");
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212, U+FEFF, U+FFFD; }
   :root {
-    --primary: #1d4f91; --primary-hover: #173f74; --primary-tint: #e8eef7; --on-primary: #ffffff;
-    --text: #1f2a37; --text-2: #4b5563; --border: #d1d5db; --border-strong: #9ca3af;
-    --bg: #f3f4f6; --surface: #ffffff; --dialog: #f5f7fb; --error: #b42318; --error-tint: #fef3f2;
+    /* DGA Platforms Code tokens: SA green 600 = primary, neutral (gray) scale, radius 4/8 */
+    --primary: #1b8354; --primary-hover: #166a45; --primary-tint: #f3fcf6; --on-primary: #ffffff;
+    --text: #0d121c; --text-2: #4d5761; --border: #e5e7eb; --border-strong: #9da4ae;
+    --bg: #f9fafb; --surface: #ffffff; --dialog: #f3f4f6; --error: #d92d20; --error-tint: #fef3f2;
     --r-sm: 4px; --r-md: 8px;
     --font: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
   }
   @media (prefers-color-scheme: dark) {
-    :root { --primary: #8fb3e8; --primary-hover: #b3cbf0; --primary-tint: #1c2a3f; --on-primary: #0d1726;
-            --text: #e5e7eb; --text-2: #a7b0bd; --border: #374151; --border-strong: #6b7280;
-            --bg: #0f141b; --surface: #161d27; --dialog: #1b2431; --error: #f97066; --error-tint: #2a1616; }
+    :root { --primary: #54c08a; --primary-hover: #88d8ad; --primary-tint: #14573a; --on-primary: #0d121c;
+            --text: #f9fafb; --text-2: #d2d6db; --border: #384250; --border-strong: #6c737f;
+            --bg: #111927; --surface: #1f2a37; --dialog: #111927; --error: #f97066; --error-tint: #3b1714; }
   }
+  :root { color-scheme: light dark; }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   html, body { max-width: 100%; overflow-x: hidden; }
