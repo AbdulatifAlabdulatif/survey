@@ -494,34 +494,55 @@ function uuid() {
   return Array.from(b, x => x.toString(16).padStart(2, "0")).join("");
 }
 
+// Sending: first by JSONP (a GET whose reply calls back into the page, so the
+// save is confirmed), then by POST with a readable reply. Success is shown only
+// when the server confirms the row was saved. The same response_id is reused on
+// retries, and the server ignores repeats, so a retry cannot duplicate a row.
+let pending = null;
+
+function sendJsonp(body, timeoutMs) {
+  return new Promise((resolve, reject) => {
+    const cb = "ppcb_" + Math.random().toString(36).slice(2);
+    const s = document.createElement("script");
+    const timer = setTimeout(() => { cleanup(); reject(new Error("timeout")); }, timeoutMs);
+    function cleanup() { clearTimeout(timer); try { delete window[cb]; } catch (e) { window[cb] = undefined; } s.remove(); }
+    window[cb] = data => { cleanup(); resolve(data); };
+    s.onerror = () => { cleanup(); reject(new Error("load")); };
+    s.src = CONFIG.ENDPOINT + "?cb=" + cb + "&d=" + encodeURIComponent(body);
+    document.head.appendChild(s);
+  });
+}
+
+async function sendPost(body) {
+  const r = await fetch(CONFIG.ENDPOINT, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body, redirect:"follow"});
+  return r.json();
+}
+
 async function submit(btn, err) {
   btn.disabled = true; btn.textContent = "جارٍ الإرسال…";
-  const payload = Object.assign({
-    response_id: uuid(),
-    version: CONFIG.VERSION + (COMPACT ? "-m" : "-d"),
-    duration_sec: Math.round((Date.now() - startedAt) / 1000),
-    scenario_order: SCEN_ORDER
-  }, answers);
-  const body = JSON.stringify(payload);
-  let ok = false;
-  try {
-    const r = await fetch(CONFIG.ENDPOINT, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body, redirect:"follow"});
-    const j = await r.json();
-    ok = !!(j && j.ok);
-  } catch (e) {
-    // Some browsers block reading the reply; send again without reading it.
-    // The server ignores a repeated response_id, so this cannot create a duplicate row.
-    try {
-      await fetch(CONFIG.ENDPOINT, {method:"POST", mode:"no-cors", headers:{"Content-Type":"text/plain;charset=utf-8"}, body});
-      ok = true;
-    } catch (e2) { ok = false; }
+  if (!pending) {
+    pending = Object.assign({
+      response_id: uuid(),
+      version: CONFIG.VERSION + (COMPACT ? "-m" : "-d"),
+      duration_sec: Math.round((Date.now() - startedAt) / 1000),
+      scenario_order: SCEN_ORDER
+    }, answers);
+  } else {
+    Object.assign(pending, answers);   // keep the same response_id
   }
-  if (ok) {
+  const body = JSON.stringify(pending);
+  let result = null, reason = "";
+  try { result = await sendJsonp(body, 15000); } catch (e) { reason = "j-" + e.message; }
+  if (!(result && result.ok)) {
+    try { result = await sendPost(body); } catch (e) { reason += " p-" + (e.name || "error"); }
+  }
+  if (result && result.ok) {
     try { localStorage.setItem("pp_survey_done", "1"); } catch (e) {}
     renderEnd(true);
   } else {
+    if (result && result.error) reason += " s-" + result.error;
     btn.disabled = false; btn.textContent = "إرسال";
-    err.textContent = "تعذّر الإرسال. تحقّق من اتصالك بالإنترنت ثم اضغط «إرسال» مرة أخرى.";
+    err.textContent = "تعذّر حفظ الإجابات. تحقّق من اتصالك بالإنترنت ثم اضغط «إرسال» مرة أخرى. (رمز: " + reason.trim() + ")";
   }
 }
 
