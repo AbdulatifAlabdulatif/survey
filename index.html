@@ -113,11 +113,27 @@
     .opts, .opts.short:not(.row) { grid-template-columns: 1fr; }
     .opts label { padding: 10px 14px; min-height: 48px; }
     .qtext { margin-bottom: 10px; }
+    .sheet.single { padding-top: 4px; font-size: .9375rem; line-height: 1.55; }
+    .sheet.single h2 { font-size: .875rem; color: var(--primary); margin: 0; }
+    .sheet.single .desc { font-size: .875rem; margin: 0 0 2px; }
+    .sheet.single .q { padding: 6px 0 0; border-top: 0; }
+    .sheet.single .qtext { font-size: 1rem; margin-bottom: 8px; }
+    .sheet.single .scenario-context, .sheet.single .scenario-note { margin-bottom: 6px; }
+    .sheet.single .dialog { padding: 8px 12px; margin-bottom: 6px; }
+    .sheet.single .dialog p { font-size: .9375rem; line-height: 1.6; }
+    .sheet.single .opts { gap: 6px; }
+    .sheet.single .opts label { min-height: 42px; padding: 6px 12px; font-size: .9375rem; }
+    .sheet.single .nav { margin-top: 10px; padding-top: 10px; }
     main { padding-bottom: calc(140px + env(safe-area-inset-bottom)); }
     .top-inner:has(.step:empty) { display: none; }
     .nav { position: static; margin-top: 20px; padding-top: 16px; }
     .nav button { flex: 1 1 0; min-width: 0; width: 100%; }
     footer.site { padding: 0 16px 24px; }
+  }
+  @media (max-height: 620px) and ((max-width: 759px) or (pointer: coarse)) {
+    .sheet.single .opts label { min-height: 38px; padding: 4px 12px; }
+    .sheet.single .dialog p, .sheet.single .scenario-context, .sheet.single .scenario-note { font-size: .875rem; }
+    .top-inner { min-height: 40px; padding-block: 6px; }
   }
   @media (prefers-reduced-motion: reduce) { .track > div { transition: none; } }
 </style>
@@ -319,31 +335,46 @@ function markMissing(container, ids) {
   }
 }
 
+// Phones: one question per screen (no scrolling); larger screens: one section per page.
+const ONE_PER_SCREEN = window.matchMedia("(max-width: 759px), (pointer: coarse)").matches;
+const SCREENS = ONE_PER_SCREEN
+  ? PAGES.flatMap(p => p.items.map(it => ({title: p.title, desc: p.desc, items: [it]})))
+  : PAGES;
+
 function renderPage() {
-  const p = PAGES[page];
-  bar.style.width = Math.round((page / PAGES.length) * 100) + "%";
-  stepEl.textContent = "القسم " + (page + 1) + " من " + PAGES.length;
+  const p = SCREENS[page];
+  const thisPage = page;
+  bar.style.width = Math.round((page / SCREENS.length) * 100) + "%";
+  stepEl.textContent = (ONE_PER_SCREEN ? "السؤال " : "القسم ") + (page + 1) + " من " + SCREENS.length;
   app.replaceChildren();
-  const c = el("div", {class:"sheet"});
+  const c = el("div", {class:"sheet" + (ONE_PER_SCREEN ? " single" : "")});
   c.append(el("h2", {}, p.title));
   if (p.desc) c.append(el("p", {class:"desc"}, p.desc));
   const err = el("p", {class:"err", role:"alert"});
-  const clearIfDone = () => { if (p.items.every(q => answers[q.id])) err.textContent = ""; };
-  p.items.forEach(q => c.append(question(q, clearIfDone)));
+  const last = page === SCREENS.length - 1;
+  const goNext = () => {
+    const missing = p.items.map(q => q.id).filter(id => !answers[id]);
+    markMissing(c, missing);
+    if (missing.length) {
+      err.textContent = ONE_PER_SCREEN ? "يُرجى اختيار إجابة للمتابعة." : "يُرجى الإجابة عن جميع الأسئلة في هذه الصفحة.";
+      return;
+    }
+    err.textContent = "";
+    if (last) return submit(next, err);
+    page += 1; renderPage(); window.scrollTo(0, 0);
+  };
+  const onAnswer = () => {
+    if (!p.items.every(q => answers[q.id])) return;
+    err.textContent = "";
+    if (ONE_PER_SCREEN && !last) setTimeout(() => { if (page === thisPage) goNext(); }, 280);
+  };
+  p.items.forEach(q => c.append(question(q, onAnswer)));
   c.append(err);
   const nav = el("div", {class:"nav"});
   const back = el("button", {class:"secondary", type:"button"}, "السابق");
   back.addEventListener("click", () => { page -= 1; page < 0 ? renderWelcome() : renderPage(); window.scrollTo(0, 0); });
-  const last = page === PAGES.length - 1;
   const next = el("button", {class:"primary", type:"button"}, last ? "إرسال" : "التالي");
-  next.addEventListener("click", () => {
-    const missing = p.items.map(q => q.id).filter(id => !answers[id]);
-    markMissing(c, missing);
-    if (missing.length) { err.textContent = "يُرجى الإجابة عن جميع الأسئلة في هذه الصفحة."; return; }
-    err.textContent = "";
-    if (last) return submit(next, err);
-    page += 1; renderPage(); window.scrollTo(0, 0);
-  });
+  next.addEventListener("click", goNext);
   nav.append(back, next);
   c.append(nav);
   app.append(c);
@@ -359,7 +390,7 @@ async function submit(btn, err) {
   btn.disabled = true; btn.textContent = "جارٍ الإرسال…";
   const payload = Object.assign({
     response_id: uuid(),
-    version: CONFIG.VERSION,
+    version: CONFIG.VERSION + (ONE_PER_SCREEN ? "-m" : "-d"),
     duration_sec: Math.round((Date.now() - startedAt) / 1000),
     scenario_order: SCEN_ORDER
   }, answers);
