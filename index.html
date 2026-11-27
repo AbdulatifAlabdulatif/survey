@@ -76,6 +76,12 @@
                       padding: 12px 6px 10px; font-size: .9rem; min-height: 84px; }
   }
   .opts.short:not(.row) { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); }
+  .sheet.single { padding: 24px 32px; }
+  .sheet.single h2 { font-size: .9375rem; color: var(--primary); margin: 0; }
+  .sheet.single .desc { font-size: .9375rem; margin: 0 0 4px; }
+  .sheet.single .q { padding: 8px 0 0; border-top: 0; }
+  .sheet.single .qtext { font-size: 1.125rem; }
+  .sheet.single .nav { margin-top: 16px; }
   .scenario-context { margin: 0 0 12px; }
   .dialog { background: var(--dialog); border: 1px solid var(--border); border-inline-start: 4px solid var(--primary);
             border-radius: var(--r-md); padding: 14px 16px; margin: 0 0 12px; }
@@ -335,8 +341,9 @@ function markMissing(container, ids) {
   }
 }
 
-// Phones: one question per screen (no scrolling); larger screens: one section per page.
-const ONE_PER_SCREEN = window.matchMedia("(max-width: 759px), (pointer: coarse)").matches;
+// One question per screen on all devices.
+const COMPACT = window.matchMedia("(max-width: 759px), (pointer: coarse)").matches;
+const ONE_PER_SCREEN = true;   // every device: one question per screen, no scrolling
 const SCREENS = ONE_PER_SCREEN
   ? PAGES.flatMap(p => p.items.map(it => ({title: p.title, desc: p.desc, items: [it]})))
   : PAGES;
@@ -389,8 +396,11 @@ function fitToScreen() {
   if (!sheet) return;
   sheet.style.zoom = "";
   const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-  const limit = vh - TOOLBAR_ALLOWANCE;
+  // Phones: every option must sit above the browser toolbar (the screen advances on its own).
+  // Laptops and desktops: the whole screen, buttons included, must fit.
+  const limit = vh - (COMPACT ? TOOLBAR_ALLOWANCE : 12);
   const lastOption = () => {
+    if (!COMPACT) return sheet.querySelector(".nav").getBoundingClientRect().bottom;
     const opts = sheet.querySelectorAll(".opts label, select");
     return opts.length ? opts[opts.length - 1].getBoundingClientRect().bottom : 0;
   };
@@ -418,7 +428,7 @@ async function submit(btn, err) {
   btn.disabled = true; btn.textContent = "جارٍ الإرسال…";
   const payload = Object.assign({
     response_id: uuid(),
-    version: CONFIG.VERSION + (ONE_PER_SCREEN ? "-m" : "-d"),
+    version: CONFIG.VERSION + (COMPACT ? "-m" : "-d"),
     duration_sec: Math.round((Date.now() - startedAt) / 1000),
     scenario_order: SCEN_ORDER
   }, answers);
