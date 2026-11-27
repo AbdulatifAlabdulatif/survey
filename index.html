@@ -239,7 +239,7 @@ function renderWelcome() {
   app.replaceChildren();
   const c = el("div", {class:"sheet"});
   c.append(el("h1", {}, "دراسة عن استخدام الخدمات الرقمية والتعامل مع البيانات الشخصية"));
-  c.append(el("p", {}, "مرحباً بك، وشكراً لاهتمامك بالمشاركة."));
+  c.append(el("p", {}, "مرحباً بك."));
   c.append(el("p", {}, "تهدف هذه الدراسة إلى فهم العلاقة بين قلق الأفراد على خصوصية البيانات الشخصية في الخدمات الرقمية، والسلوك في حمايتها، ومدى المعرفة بنظام حماية البيانات الشخصية في المملكة العربية السعودية. يجري الدراسة " + CONFIG.RESEARCHER + "."));
   const contact = el("p", {class:"contact"}, "للاستفسار: ");
   contact.append(el("a", {href:"mailto:" + CONFIG.EMAIL, dir:"ltr"}, CONFIG.EMAIL));
